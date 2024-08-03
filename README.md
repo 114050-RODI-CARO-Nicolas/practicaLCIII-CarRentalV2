@@ -1,6 +1,13 @@
 Generar un proyecto en SpringBoot desde 0 usando la herramientas Maven, base de datos H2, Junit como framework para Test Unitarios y que cumpla con los siguientes requisitos.
 
-CRUD de Vehiculo (GET all | GET by id | POST | PUT | DELETE) CRUD de Alquiler (GET all | GET by id | POST | PUT | DELETE) Validar que el vehiculo este disponible en la fecha solcitada Disponibilidad por fecha (GET by date) Test Completos: Api de disponibilidad (GET by date) Alta de alquiler (POST) Incluir automatización de Swagger con la generación del archivo swagger.json Como soporte para el desarrollo se adjunta el diagrama DER y de clases.
+CRUD de Vehiculo (GET all | GET by id | POST | PUT | DELETE) 
+CRUD de Alquiler (GET all | GET by id | POST | PUT | DELETE)Validar que el vehiculo este disponible en la fecha solcitada 
+Disponibilidad por fecha (GET by date) Test Completos: Api de disponibilidad (GET by date) 
+Alta de alquiler (POST) 
+
+
+
+Incluir automatización de Swagger con la generación del archivo swagger.json Como soporte para el desarrollo se adjunta el diagrama DER y de clases.
 
 --H2 insert statements--
 

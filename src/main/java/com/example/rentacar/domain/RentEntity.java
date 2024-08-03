@@ -6,25 +6,31 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name = "CAR")
+@Table(name = "RENT")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CarEntity {
+public class RentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ID_CAR_TYPE")
-    private CarTypeEntity carTypeEntity;
+    private CarEntity carEntity;
 
-    private String brand;
-    private String model;
+    String customer;
+    Integer rentedDays;
 
+    LocalDateTime startRent;
+    LocalDateTime endRent;
+
+    BigDecimal totalPrice;
 
 
 
