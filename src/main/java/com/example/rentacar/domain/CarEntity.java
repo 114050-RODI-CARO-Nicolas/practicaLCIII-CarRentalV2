@@ -24,6 +24,10 @@ public class CarEntity {
 
     private String brand;
     private String model;
+    @Column(name = "IS_ACTIVE")
+    private boolean isActive = true;
+
+
 
 
 

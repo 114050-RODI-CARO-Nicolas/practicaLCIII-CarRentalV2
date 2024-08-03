@@ -16,9 +16,13 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.ui.ModelMap;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -58,6 +62,93 @@ class CarServiceImplTest {
         Car returnCar = carService.createCar(carTypeIdParam, brandParam, modelParam);
         assertEquals("Hatchback", returnCar.getCarType().getType());
         assertEquals("Fiesta Kinetic", returnCar.getModel());
+
+    }
+
+    @Test
+    void updateCar()
+    {
+        // Caso de prueba: modificar el tipo de auto de un auto, Sandero, pero estaba anotado como Hatchback y ahora lo actualizan como SUV
+
+        //Given parametros para modificacion de auto existente
+        Long carIdParam=25L;
+        Long carTypeIdParam = 3L;
+
+        CarTypeEntity previousCarTypeEntity = new CarTypeEntity(2L, BigDecimal.valueOf(500), "Hatchback");
+
+
+        CarEntity existingCarEntity = new CarEntity();
+        existingCarEntity.setCarTypeEntity(previousCarTypeEntity);
+        existingCarEntity.setBrand("Renault");
+        existingCarEntity.setModel("Sandero");
+
+        CarTypeEntity newCarTypeEntity = new CarTypeEntity(3L, BigDecimal.valueOf(600), "SUV");
+        existingCarEntity.setCarTypeEntity(newCarTypeEntity);
+
+
+
+        when(carTypeRepository.findById(carTypeIdParam)).thenReturn(Optional.of(newCarTypeEntity));
+        when(carRepository.findById(carIdParam)).thenReturn(Optional.of(existingCarEntity));
+        when(carRepository.save(any(CarEntity.class))).thenReturn(existingCarEntity);
+
+        //Then
+
+        Car returnObject =   carService.updateCar(carIdParam, carTypeIdParam, null, null);
+        assertEquals(3L, returnObject.getCarType().getId());
+        assertEquals("SUV", returnObject.getCarType().getType());
+        //Se valida que no se haya visto afectado el objeto existente en otras properties mas alla de la modificada
+        assertEquals("Renault", returnObject.getBrand());
+
+
+    }
+
+    @Test
+    void getAllCars() {
+
+        //Given lista de CarEntity en el repositorio
+        List<CarEntity> mockCarEntities = new ArrayList<>();
+        CarTypeEntity carTypeEntity = new CarTypeEntity(1L, BigDecimal.valueOf(400), "Sedan");
+        for (int i = 0; i < 6; i++)
+        {
+            CarEntity carEntity = new CarEntity((long) (i + 1), carTypeEntity, "Brand"+i, "Model" + i, true);
+             mockCarEntities.add(carEntity);
+        }
+
+        when(carRepository.findAll()).thenReturn(mockCarEntities);
+
+        //Then
+
+        List<Car> returnList = carService.getAllCars();
+
+        assertNotNull(returnList);
+        assertEquals(6, returnList.size());
+        assertEquals("Sedan", returnList.get(0).getCarType().getType());
+        //AssertAll de que todos estan en isActive
+
+    }
+
+    @Test
+    void deleteCar() {
+
+
+        //Given un parametro para buscar auto a borrar
+
+        Long carIdParam = 15L;
+
+
+        //Given un auto encontrado por el repository con el parametro
+        CarTypeEntity carTypeEntity = new CarTypeEntity(1L, BigDecimal.valueOf(400), "Sedan");
+        CarEntity mockCarEntity = new CarEntity(15L, carTypeEntity, "Volkswagen", "Track", true);
+
+        //When
+        when(carRepository.findById(carIdParam)).thenReturn(Optional.of(mockCarEntity));
+        mockCarEntity.setActive(false);
+        when(carRepository.save(any(CarEntity.class))).thenReturn(mockCarEntity);
+
+        //Then
+        Car resultObject = carService.deleteCar(carIdParam);
+        assertFalse(resultObject.isActive());
+
 
     }
 }

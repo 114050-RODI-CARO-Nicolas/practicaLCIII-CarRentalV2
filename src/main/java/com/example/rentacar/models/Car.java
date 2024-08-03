@@ -12,4 +12,5 @@ public class Car {
     private CarType carType;
     private String brand;
     private String model;
+    private boolean isActive;
 }
