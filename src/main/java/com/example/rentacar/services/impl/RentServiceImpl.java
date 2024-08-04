@@ -87,7 +87,7 @@ public class RentServiceImpl implements IRentService {
     }
 
 
-    private static boolean checkIfCarCurrentylyRented(List<RentEntity> rentEntities)
+    private boolean checkIfCarCurrentylyRented(List<RentEntity> rentEntities)
     {
         if(rentEntities.isEmpty()){
             return false;
@@ -127,25 +127,25 @@ public class RentServiceImpl implements IRentService {
 
 
 
-    private  boolean checkIfRequestedRentPeriodCollidesWithExistingRents(List<RentEntity> rentEntities, LocalDateTime requestedStartDate, LocalDateTime requestedEndDate )
+    private boolean checkIfRequestedRentPeriodCollidesWithExistingRents(List<RentEntity> rentEntities, LocalDateTime requestedStartDate, LocalDateTime requestedEndDate )
     {
         if(rentEntities.isEmpty())
         {
             return false;
         }
 
-    /*
-    [
-      { startDate: .....,
-        endDate: .....
+                /* La lista de mapas a crear tendra la siguiente forma
+                [
+                  { startDate: .....,
+                    endDate: .....
 
-        },
-        { startDate: .....,
-            endDate: .....
-        },
-        ...
-    ]
-     */
+                    },
+                    { startDate: .....,
+                        endDate: .....
+                    },
+                    ...
+                ]
+                 */
         List<Map<String, LocalDateTime>> existingDatePeriods = new ArrayList<>();
         for(RentEntity existingRentEntity : rentEntities)
         {
@@ -164,7 +164,7 @@ public class RentServiceImpl implements IRentService {
             {
                 //Si la fecha de inicio solicitada NO es posterior a alguna fecha de finalizacion registrada
                 // O
-                // la fecha de fin solicitad NO es anterior a una fecha de inicio ya registrada
+                // la fecha de fin de solicitud NO es anterior a esa fecha de inicio ya registrada
                 //retornamos colisión
                 return true;
             }
