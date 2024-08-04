@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "CAR")
 @Getter
@@ -27,6 +29,8 @@ public class CarEntity {
     @Column(name = "IS_ACTIVE")
     private boolean isActive = true;
 
+    @OneToMany(mappedBy = "carEntity")
+    List<RentEntity> rentEntityList;
 
 
 

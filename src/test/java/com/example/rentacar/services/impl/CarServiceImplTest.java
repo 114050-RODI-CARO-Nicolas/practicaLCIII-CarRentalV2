@@ -110,8 +110,14 @@ class CarServiceImplTest {
         CarTypeEntity carTypeEntity = new CarTypeEntity(1L, BigDecimal.valueOf(400), "Sedan");
         for (int i = 0; i < 6; i++)
         {
-            CarEntity carEntity = new CarEntity((long) (i + 1), carTypeEntity, "Brand"+i, "Model" + i, true);
-             mockCarEntities.add(carEntity);
+
+            CarEntity carEntity = new CarEntity();
+            carEntity.setId((long)i+1);
+            carEntity.setActive(true);
+            carEntity.setCarTypeEntity(carTypeEntity);
+            carEntity.setBrand("Brand " + i);
+            carEntity.setModel("Mockmodel " + i);
+            mockCarEntities.add(carEntity);
         }
 
         when(carRepository.findAll()).thenReturn(mockCarEntities);
@@ -130,15 +136,23 @@ class CarServiceImplTest {
     @Test
     void deleteCar() {
 
+        //Se podría mejorar la rigurosidad del test si el metodo devolviera booleano;
+
 
         //Given un parametro para buscar auto a borrar
 
         Long carIdParam = 15L;
 
-
         //Given un auto encontrado por el repository con el parametro
         CarTypeEntity carTypeEntity = new CarTypeEntity(1L, BigDecimal.valueOf(400), "Sedan");
-        CarEntity mockCarEntity = new CarEntity(15L, carTypeEntity, "Volkswagen", "Track", true);
+        CarEntity mockCarEntity = new CarEntity();
+        CarEntity carEntity = new CarEntity();
+        carEntity.setId(15L);
+        carEntity.setActive(true);
+        carEntity.setCarTypeEntity(carTypeEntity);
+        carEntity.setBrand("Brand " );
+        carEntity.setModel("Mockmodel ");
+
 
         //When
         when(carRepository.findById(carIdParam)).thenReturn(Optional.of(mockCarEntity));
