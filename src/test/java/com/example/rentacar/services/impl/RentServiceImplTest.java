@@ -1,10 +1,20 @@
 package com.example.rentacar.services.impl;
 
+import com.example.rentacar.DTOs.Request.RentForCreationDTO;
 import com.example.rentacar.domain.CarEntity;
 import com.example.rentacar.domain.CarTypeEntity;
 import com.example.rentacar.domain.RentEntity;
+import com.example.rentacar.models.Rent;
+import com.example.rentacar.repositories.CarRepository;
+import com.example.rentacar.repositories.RentRepository;
+import com.example.rentacar.services.ICarService;
+import com.example.rentacar.services.IRentService;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.commons.support.ReflectionSupport;
+import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
@@ -16,11 +26,55 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
+@SpringBootTest
 class RentServiceImplTest {
+
+
+    @MockBean
+    RentRepository rentRepository;
+
+    @MockBean
+    CarRepository carRepository;
+
+    @SpyBean
+    IRentService rentService;
 
     @Test
     void createRent() {
+
+        //Utils
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
+        //Given
+        RentForCreationDTO rentForCreationDTO = new RentForCreationDTO();
+        rentForCreationDTO.setCarId(2L);
+        rentForCreationDTO.setCustomer("Kevin McCarthy");
+        rentForCreationDTO.setRentedDays(5);
+
+        String requestedStartDate = "2024-08-08 10:00:00";
+        LocalDateTime requestedStartDateParam = LocalDateTime.parse(requestedStartDate, formatter);
+        rentForCreationDTO.setStartRent(requestedStartDateParam);
+
+        CarTypeEntity mockCarTypeEntity = new CarTypeEntity(5L, BigDecimal.valueOf(500), "Hatchback");
+        CarEntity mockCarEntity = new CarEntity(2L, mockCarTypeEntity, "Toyota", "Yaris", true );
+
+        BigDecimal totalPrice = mockCarTypeEntity.getPrice().multiply(BigDecimal.valueOf(rentForCreationDTO.getRentedDays()));
+        RentEntity rentEntity = new RentEntity(5L, mockCarEntity, rentForCreationDTO.getCustomer(), rentForCreationDTO.getRentedDays(), requestedStartDateParam, requestedStartDateParam.plusDays(5), totalPrice);
+
+        when(carRepository.findById(rentForCreationDTO.getCarId())).thenReturn(Optional.of(mockCarEntity));
+        when(rentRepository.save(Mockito.any(RentEntity.class))).thenReturn(rentEntity);
+
+        Rent objectResult = rentService.createRent(rentForCreationDTO);
+        //Then
+        assertEquals(5, objectResult.getRentedDays());
+
+
+
+
     }
 
     @Test

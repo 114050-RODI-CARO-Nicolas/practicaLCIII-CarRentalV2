@@ -87,7 +87,7 @@ public class RentServiceImpl implements IRentService {
     }
 
 
-    private boolean checkIfCarCurrentylyRented(List<RentEntity> rentEntities)
+    private boolean checkIfCarCurrentlyRented(List<RentEntity> rentEntities)
     {
         if(rentEntities.isEmpty()){
             return false;
