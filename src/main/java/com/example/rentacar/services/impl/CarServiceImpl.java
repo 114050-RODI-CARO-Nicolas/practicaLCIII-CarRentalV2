@@ -50,7 +50,7 @@ public class CarServiceImpl implements ICarService {
             throw new HttpClientErrorException(HttpStatusCode.valueOf(400), "No car type found with the sent ID");
         }
         CarEntity carEntity = new CarEntity();
-        carEntity.setCarTypeEntity(foundCarTypeEntity);
+        carEntity.setCarType(foundCarTypeEntity);
         carEntity.setBrand(brand);
         carEntity.setModel(model);
         return modelMapper.map(carRepository.save(carEntity), Car.class);
@@ -72,7 +72,7 @@ public class CarServiceImpl implements ICarService {
             if(foundCarTypeEntity==null) {
                 throw new HttpClientErrorException(HttpStatusCode.valueOf(400), "No car type found with the sent ID");
             };
-            foundCarEntity.setCarTypeEntity(foundCarTypeEntity);
+            foundCarEntity.setCarType(foundCarTypeEntity);
         }
 
 

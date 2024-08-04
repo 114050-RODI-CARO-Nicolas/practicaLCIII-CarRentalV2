@@ -34,6 +34,18 @@ public class RentServiceImpl implements IRentService {
     @Autowired
     ModelMapper modelMapper;
 
+    private List<Rent> getRentsByCarId (Long carId) {
+        List<RentEntity> rentEntities = rentRepository.findByCarId(carId);
+        List<Rent> rents = modelMapper.map(rentEntities, new TypeToken<List<Rent>>() {}.getType());
+        return rents;
+    }
+
+    private List<RentEntity> getRentEntitiesByCarId(Long carId)
+    {
+        List<RentEntity> rentEntities = rentRepository.findByCarId(carId);
+        return rentEntities;
+    }
+
     @Override
     @Transactional
     public Rent createRent(RentForCreationDTO requestDTO) {
@@ -46,22 +58,16 @@ public class RentServiceImpl implements IRentService {
         {
             throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "The requested car is no longer active");
         }
-        List<RentEntity> existingRentEntities = foundCarEntity.getRentEntityList();
-
-
-        if( checkIfCarCurrentylyRented(existingRentEntities) )
-        {
-            throw new HttpClientErrorException(HttpStatus.BAD_REQUEST, "Car already rented at the requested date");
-        }
+        List<RentEntity> existingRentEntities = getRentEntitiesByCarId(foundCarEntity.getId());
 
 
         RentEntity rentEntity = new RentEntity();
-        rentEntity.setCarEntity(foundCarEntity);
+        rentEntity.setCar(foundCarEntity);
         rentEntity.setCustomer(requestDTO.getCustomer());
         rentEntity.setRentedDays(requestDTO.getRentedDays());
         rentEntity.setStartRent(requestDTO.getStartRent());
         rentEntity.setEndRent(rentEntity.getStartRent().plusDays(requestDTO.getRentedDays()));
-        BigDecimal totalPrice = foundCarEntity.getCarTypeEntity().getPrice().multiply( BigDecimal.valueOf(requestDTO.getRentedDays()));
+        BigDecimal totalPrice = foundCarEntity.getCarType().getPrice().multiply( BigDecimal.valueOf(requestDTO.getRentedDays()));
         rentEntity.setTotalPrice(totalPrice);
 
         if(checkIfRequestedRentPeriodCollidesWithExistingRents(existingRentEntities, rentEntity.getStartRent(), rentEntity.getEndRent()))

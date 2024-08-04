@@ -22,7 +22,7 @@ public class RentEntity {
     private Long id;
 
     @ManyToOne
-    private CarEntity carEntity;
+    private CarEntity car;
 
     String customer;
     Integer rentedDays;

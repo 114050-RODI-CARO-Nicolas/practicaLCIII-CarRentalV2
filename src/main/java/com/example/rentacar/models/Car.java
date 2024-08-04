@@ -15,5 +15,5 @@ public class Car {
     private String brand;
     private String model;
     private boolean isActive;
-    private List<Rent> rentList;
+
 }

@@ -1,8 +1,10 @@
 package com.example.rentacar.controllers;
 
 import com.example.rentacar.DTOs.Request.RentForCreationDTO;
+import com.example.rentacar.DTOs.Response.RentCreationResponseDTO;
 import com.example.rentacar.models.Rent;
 import com.example.rentacar.services.IRentService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,9 @@ public class RentController {
     @Autowired
     private IRentService rentService;
 
+    @Autowired
+    private ModelMapper moodelMapper;
+
     @GetMapping
     public ResponseEntity<List<Rent>> getAllRents()
     {
@@ -23,10 +28,12 @@ public class RentController {
         return ResponseEntity.ok(rents);
     }
     @PostMapping
-    public ResponseEntity<Rent> registerRent(@RequestBody RentForCreationDTO requestDTO)
+    public ResponseEntity<RentCreationResponseDTO> registerRent(@RequestBody RentForCreationDTO requestDTO)
     {
         Rent rent = rentService.createRent(requestDTO);
-        return ResponseEntity.ok(rent);
+        RentCreationResponseDTO rentCreationResponseDTO = moodelMapper.map(rent, RentCreationResponseDTO.class);
+        return ResponseEntity.ok(rentCreationResponseDTO);
+
     }
 
 

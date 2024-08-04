@@ -49,7 +49,7 @@ class CarServiceImplTest {
         CarTypeEntity carTypeEntity = new CarTypeEntity(2L, BigDecimal.valueOf(500), "Hatchback");
 
         CarEntity carEntity = new CarEntity();
-        carEntity.setCarTypeEntity(carTypeEntity);
+        carEntity.setCarType(carTypeEntity);
         carEntity.setBrand(brandParam);
         carEntity.setModel(modelParam);
 
@@ -78,12 +78,12 @@ class CarServiceImplTest {
 
 
         CarEntity existingCarEntity = new CarEntity();
-        existingCarEntity.setCarTypeEntity(previousCarTypeEntity);
+        existingCarEntity.setCarType(previousCarTypeEntity);
         existingCarEntity.setBrand("Renault");
         existingCarEntity.setModel("Sandero");
 
         CarTypeEntity newCarTypeEntity = new CarTypeEntity(3L, BigDecimal.valueOf(600), "SUV");
-        existingCarEntity.setCarTypeEntity(newCarTypeEntity);
+        existingCarEntity.setCarType(newCarTypeEntity);
 
 
 
@@ -114,7 +114,7 @@ class CarServiceImplTest {
             CarEntity carEntity = new CarEntity();
             carEntity.setId((long)i+1);
             carEntity.setActive(true);
-            carEntity.setCarTypeEntity(carTypeEntity);
+            carEntity.setCarType(carTypeEntity);
             carEntity.setBrand("Brand " + i);
             carEntity.setModel("Mockmodel " + i);
             mockCarEntities.add(carEntity);
@@ -149,7 +149,7 @@ class CarServiceImplTest {
         CarEntity carEntity = new CarEntity();
         carEntity.setId(15L);
         carEntity.setActive(true);
-        carEntity.setCarTypeEntity(carTypeEntity);
+        carEntity.setCarType(carTypeEntity);
         carEntity.setBrand("Brand " );
         carEntity.setModel("Mockmodel ");
 

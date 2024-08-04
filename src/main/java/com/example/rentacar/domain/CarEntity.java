@@ -22,18 +22,12 @@ public class CarEntity {
 
     @ManyToOne
     @JoinColumn(name = "ID_CAR_TYPE")
-    private CarTypeEntity carTypeEntity;
+    private CarTypeEntity carType;
 
     private String brand;
     private String model;
     @Column(name = "IS_ACTIVE")
     private boolean isActive = true;
-
-    @OneToMany(mappedBy = "carEntity")
-    List<RentEntity> rentEntityList;
-
-
-
 
 
 }
