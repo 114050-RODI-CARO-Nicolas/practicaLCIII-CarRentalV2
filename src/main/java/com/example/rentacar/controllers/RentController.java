@@ -4,6 +4,7 @@ import com.example.rentacar.DTOs.Request.RentForCreationDTO;
 import com.example.rentacar.DTOs.Response.RentCreationResponseDTO;
 import com.example.rentacar.models.Rent;
 import com.example.rentacar.services.IRentService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class RentController {
         return ResponseEntity.ok(rents);
     }
     @PostMapping
-    public ResponseEntity<RentCreationResponseDTO> registerRent(@RequestBody RentForCreationDTO requestDTO)
+    public ResponseEntity<RentCreationResponseDTO> registerRent(@RequestBody @Valid RentForCreationDTO requestDTO)
     {
         Rent rent = rentService.createRent(requestDTO);
         RentCreationResponseDTO rentCreationResponseDTO = moodelMapper.map(rent, RentCreationResponseDTO.class);
